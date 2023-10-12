@@ -40,6 +40,7 @@ begin
 		,cd.ID as ID_dbo_CustomerDistributor
 		,cast(isnull(cs.FlagActive, 0) as bit) as FlagActive
 	into #CustomerSeasonal
+	--Желательно добавить as перед объявлением алиаса, не везде можно принебрегать as
 	from syn.SA_CustomerSeasonal cs
 		join dbo.Customer as cc on cc.UID_DS = cs.UID_DS_Customer
 			and cc.ID_mapping_DataSource = 1

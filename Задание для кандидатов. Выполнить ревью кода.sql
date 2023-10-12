@@ -46,6 +46,7 @@ begin
 		join dbo.Customer as cc on cc.UID_DS = cs.UID_DS_Customer
 			and cc.ID_mapping_DataSource = 1
 		join dbo.Season as s on s.Name = cs.Season
+		--Присоединение одной и той же таблицы с разными алиасами
 		join dbo.Customer as cd on cd.UID_DS = cs.UID_DS_CustomerDistributor
 			and cd.ID_mapping_DataSource = 1
 		join syn.CustomerSystemType as cst on cs.CustomerSystemType = cst.Name

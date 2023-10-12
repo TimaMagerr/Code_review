@@ -61,6 +61,7 @@ begin
 	select
 		cs.*
 		,case
+			--Конструкция then некорректна
 			when cc.ID is null then 'UID клиента отсутствует в справочнике "Клиент"'
 			when cd.ID is null then 'UID дистрибьютора отсутствует в справочнике "Клиент"'
 			when s.ID is null then 'Сезон отсутствует в справочнике "Сезон"'

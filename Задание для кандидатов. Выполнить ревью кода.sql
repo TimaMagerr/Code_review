@@ -42,6 +42,7 @@ begin
 	into #CustomerSeasonal
 	--Желательно добавить as перед объявлением алиаса, не везде можно принебрегать as
 	from syn.SA_CustomerSeasonal cs
+		--Все виды join указываются явно
 		join dbo.Customer as cc on cc.UID_DS = cs.UID_DS_Customer
 			and cc.ID_mapping_DataSource = 1
 		join dbo.Season as s on s.Name = cs.Season

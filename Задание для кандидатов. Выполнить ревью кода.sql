@@ -15,13 +15,14 @@ begin
 		where f.ID = @ID_Record
 			and f.FlagLoaded = cast(1 as bit)
 	)
-		begin
-			set @ErrorMessage = 'Ошибка при загрузке файла, проверьте корректность данных'
-			raiserror(@ErrorMessage, 3, 1)
+	--Наоборот не нужна табуляция
+	begin
+		set @ErrorMessage = 'Ошибка при загрузке файла, проверьте корректность данных'
+		raiserror(@ErrorMessage, 3, 1)
 
-			--Нужна пустая строка перед return, а не выше
-			return
-		end
+		--Нужна пустая строка перед return, а не выше
+		return
+	end
 
 	CREATE TABLE #ProcessedRows (
 		ActionType varchar(255),

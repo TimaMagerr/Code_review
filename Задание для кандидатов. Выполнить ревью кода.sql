@@ -7,7 +7,7 @@ begin
 	declare @RowCount int = (select count(*) from syn.SA_CustomerSeasonal)
 	declare @ErrorMessage varchar(max)
 
--- Проверка на корректность загрузки
+-- Проверка на корректность загрузки - некорректная проверка
 	if not exists (
 		--Неверное форматирование - необходима табуляция, ибо условный оператор
 		select 1

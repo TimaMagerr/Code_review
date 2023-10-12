@@ -8,11 +8,12 @@ begin
 
 -- Проверка на корректность загрузки
 	if not exists (
-	select 1
-	-- Неправильный алиас (должен быть if)
-	from syn.ImportFile as f
-	where f.ID = @ID_Record
-		and f.FlagLoaded = cast(1 as bit)
+		--Неверное форматирование - необходима табуляция, ибо условный оператор
+		select 1
+		-- Неправильный алиас (должен быть if)
+		from syn.ImportFile as f
+		where f.ID = @ID_Record
+			and f.FlagLoaded = cast(1 as bit)
 	)
 		begin
 			set @ErrorMessage = 'Ошибка при загрузке файла, проверьте корректность данных'

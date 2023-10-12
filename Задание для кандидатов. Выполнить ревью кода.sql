@@ -16,8 +16,9 @@ begin
 	)
 		begin
 			set @ErrorMessage = 'Ошибка при загрузке файла, проверьте корректность данных'
-
 			raiserror(@ErrorMessage, 3, 1)
+
+			--Нужна пустая строка перед return, а не выше
 			return
 		end
 

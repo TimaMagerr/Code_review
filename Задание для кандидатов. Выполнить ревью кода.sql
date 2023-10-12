@@ -25,6 +25,7 @@ begin
 	end
 
 	CREATE TABLE #ProcessedRows (
+		--Наименование переменных не соблюдено 
 		ActionType varchar(255),
 		ID int
 	)

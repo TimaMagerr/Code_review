@@ -75,6 +75,7 @@ begin
 	--Табуляция для join не соблюдена
 	left join dbo.Customer as cc on cc.UID_DS = cs.UID_DS_Customer
 		and cc.ID_mapping_DataSource = 1
+	--Нужен постфикс 
 	left join dbo.Customer as cd on cd.UID_DS = cs.UID_DS_CustomerDistributor and cd.ID_mapping_DataSource = 1
 	left join dbo.Season as s on s.Name = cs.Season
 	left join syn.CustomerSystemType as cst on cst.Name = cs.CustomerSystemType

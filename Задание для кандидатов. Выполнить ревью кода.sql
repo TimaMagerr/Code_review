@@ -3,24 +3,30 @@ create procedure syn.usp_ImportFileCustomerSeasonal
 as
 set nocount on
 begin
+	--Объявление declare должно быть 1 раз
 	declare @RowCount int = (select count(*) from syn.SA_CustomerSeasonal)
 	declare @ErrorMessage varchar(max)
 
--- Проверка на корректность загрузки
+-- Проверка на корректность загрузки - некорректная проверка
 	if not exists (
-	select 1
-	from syn.ImportFile as f
-	where f.ID = @ID_Record
-		and f.FlagLoaded = cast(1 as bit)
+		--Неверное форматирование - необходима табуляция, ибо условный оператор
+		select 1
+		-- Неправильный алиас (должен быть if)
+		from syn.ImportFile as f
+		where f.ID = @ID_Record
+			and f.FlagLoaded = cast(1 as bit)
 	)
-		begin
-			set @ErrorMessage = 'Ошибка при загрузке файла, проверьте корректность данных'
+	--Наоборот не нужна табуляция
+	begin
+		set @ErrorMessage = 'Ошибка при загрузке файла, проверьте корректность данных'
+		raiserror(@ErrorMessage, 3, 1)
 
-			raiserror(@ErrorMessage, 3, 1)
-			return
-		end
+		--Нужна пустая строка перед return, а не выше
+		return
+	end
 
 	CREATE TABLE #ProcessedRows (
+		--Наименование переменных не соблюдено 
 		ActionType varchar(255),
 		ID int
 	)
@@ -35,12 +41,16 @@ begin
 		,cd.ID as ID_dbo_CustomerDistributor
 		,cast(isnull(cs.FlagActive, 0) as bit) as FlagActive
 	into #CustomerSeasonal
+	--Желательно добавить as перед объявлением алиаса, не везде можно принебрегать as
 	from syn.SA_CustomerSeasonal cs
+		--Все виды join указываются явно
 		join dbo.Customer as cc on cc.UID_DS = cs.UID_DS_Customer
 			and cc.ID_mapping_DataSource = 1
 		join dbo.Season as s on s.Name = cs.Season
+		--Присоединение одной и той же таблицы с разными алиасами
 		join dbo.Customer as cd on cd.UID_DS = cs.UID_DS_CustomerDistributor
 			and cd.ID_mapping_DataSource = 1
+		-Сначала поле присоединяемой таблицы, после другой
 		join syn.CustomerSystemType as cst on cs.CustomerSystemType = cst.Name
 	where try_cast(cs.DateBegin as date) is not null
 		and try_cast(cs.DateEnd as date) is not null
@@ -51,18 +61,22 @@ begin
 	select
 		cs.*
 		,case
+			--Конструкция then некорректна
 			when cc.ID is null then 'UID клиента отсутствует в справочнике "Клиент"'
 			when cd.ID is null then 'UID дистрибьютора отсутствует в справочнике "Клиент"'
 			when s.ID is null then 'Сезон отсутствует в справочнике "Сезон"'
 			when cst.ID is null then 'Тип клиента в справочнике "Тип клиента"'
 			when try_cast(cs.DateBegin as date) is null then 'Невозможно определить Дату начала'
+			--Невозможно определить Дату конца
 			when try_cast(cs.DateEnd as date) is null then 'Невозможно определить Дату начала'
 			when try_cast(isnull(cs.FlagActive, 0) as bit) is null then 'Невозможно определить Активность'
 		end as Reason
 	into #BadInsertedRows
 	from syn.SA_CustomerSeasonal as cs
+	--Табуляция для join не соблюдена
 	left join dbo.Customer as cc on cc.UID_DS = cs.UID_DS_Customer
 		and cc.ID_mapping_DataSource = 1
+	--Нужен постфикс 
 	left join dbo.Customer as cd on cd.UID_DS = cs.UID_DS_CustomerDistributor and cd.ID_mapping_DataSource = 1
 	left join dbo.Season as s on s.Name = cs.Season
 	left join syn.CustomerSystemType as cst on cst.Name = cs.CustomerSystemType

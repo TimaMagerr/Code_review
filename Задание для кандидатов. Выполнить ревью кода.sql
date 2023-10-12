@@ -49,6 +49,7 @@ begin
 		--Присоединение одной и той же таблицы с разными алиасами
 		join dbo.Customer as cd on cd.UID_DS = cs.UID_DS_CustomerDistributor
 			and cd.ID_mapping_DataSource = 1
+		-Сначала поле присоединяемой таблицы, после другой
 		join syn.CustomerSystemType as cst on cs.CustomerSystemType = cst.Name
 	where try_cast(cs.DateBegin as date) is not null
 		and try_cast(cs.DateEnd as date) is not null

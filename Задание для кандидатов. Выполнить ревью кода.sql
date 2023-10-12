@@ -72,6 +72,7 @@ begin
 		end as Reason
 	into #BadInsertedRows
 	from syn.SA_CustomerSeasonal as cs
+	--Табуляция для join не соблюдена
 	left join dbo.Customer as cc on cc.UID_DS = cs.UID_DS_Customer
 		and cc.ID_mapping_DataSource = 1
 	left join dbo.Customer as cd on cd.UID_DS = cs.UID_DS_CustomerDistributor and cd.ID_mapping_DataSource = 1
